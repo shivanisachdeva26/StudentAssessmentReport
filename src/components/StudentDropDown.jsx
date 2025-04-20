@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import { useStudentContext } from "../context/Studentcontext";
 const StudentSelector = () => {
   const { students, selectedStudent, loading, error, setSelectedStudent } =

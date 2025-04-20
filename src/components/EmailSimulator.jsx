@@ -1,47 +1,10 @@
-// import { useState, useContext } from 'react';
-// import { useStudentContext } from '../context/Studentcontext.jsx';
-// const EmailSimulator = () => {
-//   const { report } = useStudentContext();
-//   const [emailSent, setEmailSent] = useState(false);
-
-//   const handleSendEmail = () => {
-//     if (!report) return;
-    
-//     // In a real app, this would call an API endpoint
-//     console.log(`Sending report for ${report.name} to email`);
-//     setEmailSent(true);
-    
-//     // Reset after 3 seconds
-//     setTimeout(() => setEmailSent(false), 3000);
-//   };
-
-//   return (
-//     <div className="flex justify-center mt-4">
-//       <button
-//         onClick={handleSendEmail}
-//         disabled={!report}
-//         className={`font-medium py-2 px-4 rounded ${
-//           !report 
-//             ? 'bg-gray-400 cursor-not-allowed' 
-//             : emailSent 
-//               ? 'bg-green-600 text-white' 
-//               : 'bg-blue-600 hover:bg-blue-700 text-white'
-//         }`}
-//       >
-//         {emailSent ? 'Email Sent!' : 'Send Report via Email'}
-//       </button>
-//     </div>
-//   );
-// };
-
-// export default EmailSimulator;
 import React, { useState } from "react";
 import { Mail, X, Check } from "lucide-react";
 
 const EmailSimulator = () => {
   const [showModal, setShowModal] = useState(false);
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState(null); // null, 'sending', 'success', 'error'
+  const [status, setStatus] = useState(null); 
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -49,7 +12,7 @@ const EmailSimulator = () => {
     
     setStatus('sending');
     
-    // Simulate sending email
+    
     setTimeout(() => {
       setStatus('success');
       setTimeout(() => {

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ChevronDown, ChevronUp, Briefcase, GraduationCap, Brain, TrendingUp } from "lucide-react";
 
 const CareerPathway = ({ role, index }) => {
-  const [isExpanded, setIsExpanded] = useState(index === 0); // First one expanded by default
+  const [isExpanded, setIsExpanded] = useState(index === 0);
 
   return (
     <div 
