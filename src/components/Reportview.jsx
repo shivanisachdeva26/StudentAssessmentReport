@@ -1,10 +1,12 @@
+
 import React, { useRef } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { useStudentContext } from "../context/Studentcontext";
+import ReportViewer from "./ReportViewer";
 import EmailSimulator from "./EmailSimulator";
-import { Download, Mail, Loader } from "lucide-react";
-import ReportViewer from "./ReportViewer"; 
+import { Download } from "lucide-react";
+import { Loader } from "lucide-react";
 
 const ReportWithDownload = () => {
   const reportRef = useRef(null);
@@ -13,23 +15,41 @@ const ReportWithDownload = () => {
 
   const handleDownload = async () => {
     if (!reportRef.current || !report) return;
-    
+
     setIsDownloading(true);
-    
+
     try {
-      const canvas = await html2canvas(reportRef.current, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        allowTaint: true,
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
       });
-  
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4");
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-  
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+
+      const elements = reportRef.current.querySelectorAll(".page");
+      const totalPages = elements.length;
+
+      for (let i = 0; i < totalPages; i++) {
+        const element = elements[i];
+        const canvas = await html2canvas(element, {
+          scale: 3, // Higher scale for better quality
+          useCORS: true,
+          logging: false,
+          scrollY: -window.scrollY,
+          windowWidth: element.scrollWidth,
+          windowHeight: element.scrollHeight,
+        });
+
+        const imgData = canvas.toDataURL("image/png", 1.0);
+
+        if (i > 0) pdf.addPage();
+
+        // Calculate dimensions to maintain aspect ratio
+        const imgWidth = 210; // A4 width in mm
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+      }
+
       pdf.save(`${report.name}-career-report.pdf`);
     } catch (error) {
       console.error("Error generating PDF:", error);
@@ -39,7 +59,7 @@ const ReportWithDownload = () => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-xl overflow-hidden">
+    <div>
       <ReportViewer ref={reportRef} />
 
       {report && !loadingReport && (
@@ -55,9 +75,11 @@ const ReportWithDownload = () => {
               ) : (
                 <Download className="h-5 w-5" />
               )}
-              <span>{isDownloading ? "Generating PDF..." : "Download PDF Report"}</span>
+              <span>
+                {isDownloading ? "Generating PDF..." : "Download PDF Report"}
+              </span>
             </button>
-            
+
             <EmailSimulator />
           </div>
         </div>

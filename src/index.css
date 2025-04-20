@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* styles.css or your global CSS file */
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  body, html {
+    width: 210mm;
+    height: 297mm;
+  }
+  
+  .page {
+    page-break-after: always;
+    height: 297mm;
+    width: 210mm;
+  }
+  
+  .report-container {
+    width: 210mm;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+}
+
+.page {
+  margin-bottom: 20px;
+  padding: 20mm; /* Standard PDF margins */
+  box-sizing: border-box;
+}
